@@ -21,4 +21,24 @@ public interface GroupService {
      * */
     Result findOneByEmailAndPassword(Group group);
 
+    /**
+     * update group info
+     * @param group entity
+     * @return result
+     * */
+    Result updateGroupInfo(Group group);
+
+    /**
+     * findAll
+     * @return result
+     * */
+    Result findAll();
+
+    /**
+     * delete
+     * @param group
+     * @return result
+     * */
+    Result deleteById(Group group);
+
 }

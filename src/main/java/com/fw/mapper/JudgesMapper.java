@@ -21,6 +21,22 @@ public interface JudgesMapper {
     @Select("select * from judges where email=#{email} and password=#{password}")
     Judges findOneByEmailAndPassword(Judges judges);
 
+    /***
+     * find one by email
+     * @param judges entity
+     * @return judges
+     * */
+    @Select("select * from judges where email =#{email}")
+    List<Judges> findOneByEmail(Judges judges);
+
+    /**
+     * find one by id
+     * @param judges
+     * @return list
+     * */
+    @Select("select * from judges where id =#{id}")
+    List<Judges> findOneById(Judges judges);
+
     /**
      * find All judges
      * @param

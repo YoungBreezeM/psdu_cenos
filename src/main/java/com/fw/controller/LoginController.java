@@ -4,7 +4,9 @@ package com.fw.controller;
 import com.fw.domain.*;
 import com.fw.service.AdminService;
 import com.fw.service.GroupService;
+import com.fw.service.JudgesService;
 import com.fw.utils.TokenUtil;
+import org.apache.ibatis.annotations.Select;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,9 +31,11 @@ public class LoginController {
     @Autowired
     private AdminService adminService;
 
+    @Autowired
+    private JudgesService judgesService;
 
 
-    @PostMapping
+    @GetMapping
     public ResponseEntity<Result> loginCheck(@Validated @RequestBody User user){
 
         Result result = null;
@@ -58,22 +62,21 @@ public class LoginController {
             result = adminService.findOneByNameAndPassword(admin);
         }
 
+        if(Role.Judges.getType().equals(user.getRole())){
+
+            Judges judges = new Judges();
+
+            judges.setEmail(user.getAccount());
+
+            judges.setPassword(user.getPassword());
+
+            result = judgesService.findOneByEmailAndPassword(judges);
+        }
+
         if(result==null){
             return new ResponseEntity<>(new Result(ResultType.UnRole,"角色错误"),HttpStatus.OK);
         }
 
-        if(result.getCode()==0){
-
-            Map<String,Object> data = new HashMap<>(4);
-
-            data.put("token",TokenUtil.sign(user));
-
-            data.put("role",user.getRole());
-
-            result.setData(data);
-
-            return new ResponseEntity<>(result, HttpStatus.OK);
-        }
 
         return new ResponseEntity<>(result,HttpStatus.OK);
     }

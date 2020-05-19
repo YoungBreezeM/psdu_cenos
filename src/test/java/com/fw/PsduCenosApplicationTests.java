@@ -1,10 +1,7 @@
 package com.fw;
 
 import com.fw.domain.*;
-import com.fw.mapper.AdminMapper;
-import com.fw.mapper.EntryMapper;
-import com.fw.mapper.GroupMapper;
-import com.fw.mapper.JudgesMapper;
+import com.fw.mapper.*;
 import com.fw.service.impl.GroupServiceImpl;
 import com.fw.utils.TokenUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +19,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 
 @SpringBootTest
 class PsduCenosApplicationTests {
@@ -37,6 +35,9 @@ class PsduCenosApplicationTests {
 
     @Autowired
     private JudgesMapper judgesMapper;
+
+    @Autowired
+    private FileMapper fileMapper;
 
 
     @Test
@@ -64,7 +65,8 @@ class PsduCenosApplicationTests {
         entry.setEntryName("ok");
         entry.setGroupId(3);
         entry.setId(5);
-        entryMapper.deleteEntryById(entry.getId());
+        System.out.println(entry);
+//        entryMapper.deleteEntryById(entry.getId());
     }
 
     @Test
@@ -134,6 +136,30 @@ class PsduCenosApplicationTests {
 
         Files.createDirectories(uploadPath);
         System.out.println(uploadPath);
+    }
+
+    @Test
+    void testFileMapper(){
+        Entry entry = new Entry();
+
+        entry.setId(7);
+
+        UploadFile uploadFileById = fileMapper.findUploadFileById(6);
+
+        Entry oneById = entryMapper.findOneById(entry);
+
+        uploadFileById.setEntryId(entry.getId());
+
+        List<UploadFile> files = oneById.getFiles();
+
+        files.add(uploadFileById);
+
+        for (UploadFile file : files) {
+            fileMapper.updateEntryIdById(file);
+        }
+
+
+        System.out.println(files);
     }
 
 }

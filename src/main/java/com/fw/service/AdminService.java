@@ -23,4 +23,11 @@ public interface AdminService {
      * @return Admin
      * */
     Result findOneByNameAndPassword(Admin admin);
+
+    /**
+     * update info
+     * @param admin entity
+     * @return  result
+     * */
+    Result updateAdminInfo(Admin admin);
 }

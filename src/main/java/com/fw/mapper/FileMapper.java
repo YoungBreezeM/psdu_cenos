@@ -1,6 +1,8 @@
 package com.fw.mapper;
 
 
+import com.fw.domain.Entry;
+import com.fw.domain.Judges;
 import com.fw.domain.UploadFile;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
@@ -41,6 +43,17 @@ public interface FileMapper {
     UploadFile findUploadFileByFileName(UploadFile uploadFile);
 
     /**
+     * find all file by entryId
+     * @param entry entity
+     * @return list
+     * */
+    @Select("select * from upload_file where entry_id = #{id}")
+    @Results(id = "fileMap",value = {
+        @Result(column = "entry_id",property = "entryId")
+    })
+    List<UploadFile> findAllByEntryId(Entry entry);
+
+    /**
      * 添加文件
      * @param uploadFile
      * */
@@ -53,4 +66,11 @@ public interface FileMapper {
      * */
     @Delete("delete from upload_file where id =#{id}")
     void deleteFile(@Param("id") Integer id);
+
+    /**
+     * update entry by id
+     * @param file entity
+     * */
+    @Update("update upload_file set entry_id =#{entryId} where id =#{id}")
+    void updateEntryIdById(UploadFile file);
 }

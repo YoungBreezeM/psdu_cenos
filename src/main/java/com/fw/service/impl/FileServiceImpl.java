@@ -1,6 +1,7 @@
 package com.fw.service.impl;
 
 
+import com.fw.domain.Entry;
 import com.fw.domain.FileProperties;
 import com.fw.domain.UploadFile;
 
@@ -41,7 +42,7 @@ public class FileServiceImpl implements FileService {
     @Autowired
     FileProperties fileProperties;
 
-    private final Path fileStorageLocation; // 文件在本地存储的地址
+    private final Path fileStorageLocation;
 
     @Autowired
     public FileServiceImpl(FileProperties fileProperties) throws FileNotFoundException {
@@ -159,6 +160,20 @@ public class FileServiceImpl implements FileService {
             System.out.println("在这里进行异常处理"+e.getMessage());
             throw new ExecutorException(e);
         }
+    }
+
+    @Override
+    public void updateEntryIdById(Entry entry) {
+
+        List<UploadFile> files = entry.getFiles();
+
+        for (UploadFile file : files) {
+
+            file.setEntryId(entry.getId());
+
+            fileMapper.updateEntryIdById(file);
+        }
+
     }
 }
 

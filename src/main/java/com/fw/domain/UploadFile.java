@@ -27,6 +27,8 @@ public class UploadFile implements Serializable {
 
     private long size;
 
+    private Integer entryId;
+
     public UploadFile(String fileName, String fileDownloadUrl, String fileAccessUrl, String fileType, long size) {
         this.fileName = fileName;
         this.fileDownloadUrl = fileDownloadUrl;

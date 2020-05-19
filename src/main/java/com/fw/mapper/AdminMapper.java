@@ -30,9 +30,16 @@ public interface AdminMapper {
      @Select("select * from admin where adminName=#{adminName}")
      List<Admin> findOneByName(Admin admin);
 
+     /**
+      * find all by id
+      * @param admin entity
+      * @return list
+      * */
+     @Select("select * from admin where id =#{id}")
+     List<Admin> findAllById(Admin admin);
+
     /**
      * find All admin
-     * @param
      * @return admin list
      * */
     @Select("select * from admin")

@@ -24,4 +24,6 @@ public class DateUtil {
         SimpleDateFormat sdf = new SimpleDateFormat(format);
         return sdf.format(new Date(Long.parseLong(String.valueOf(timeStamp))));
     }
+
+
 }

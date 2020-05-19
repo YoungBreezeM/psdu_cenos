@@ -38,6 +38,13 @@ public interface GroupMapper {
     @Select("select * from join_group where email =#{email}")
     List<Group> findAllByEmail(Group group);
 
+    /**
+     * find one by id
+     * @param group entity
+     * @return group
+     * */
+    @Select("select * from join_group where id =#{id}")
+    List<Group> findAllById(Group group);
 
     /**
      * add group

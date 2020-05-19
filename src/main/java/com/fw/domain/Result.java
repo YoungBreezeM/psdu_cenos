@@ -20,10 +20,21 @@ public class Result implements Serializable {
 
     private Object data;
 
-    public Result(ResultType resultType,String msg) {
+    public Result(ResultType resultType,String msg,Object data) {
 
         this.code = resultType.getCode();
-
         this.msg = msg;
+        this.data = data;
+    }
+
+    public Result(ResultType resultType) {
+        this.code = resultType.getCode();
+        this.msg = resultType.getMsg();
+    }
+
+    public Result(ResultType resultType,Object data){
+        this.code = resultType.getCode();
+        this.msg = resultType.getMsg();
+        this.data = data;
     }
 }

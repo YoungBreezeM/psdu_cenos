@@ -48,7 +48,7 @@ public class FileController {
     @PostMapping("/uploadMultipleFiles")
     public List<UploadFile> uploadMultipleFiles(@RequestParam("files") MultipartFile[] files) {
         return Arrays.stream(files)
-                .map(file->uploadFile(file))
+                .map(this::uploadFile)
                 .collect(Collectors.toList());
     }
 
@@ -91,8 +91,5 @@ public class FileController {
             return new Result(1,e.getMessage(),null);
         }
     }
-
-
-
 
 }
