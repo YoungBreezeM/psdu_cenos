@@ -15,7 +15,7 @@ import java.util.Date;
  */
 public class TokenUtil {
 
-    private static final long EXPIRE_TIME = 15 * 60 * 1000;
+    private static final long EXPIRE_TIME = 15 * 60 * 1000*60;
     private static final String TOKEN_SECRET = "token123";
 
 
@@ -24,13 +24,15 @@ public class TokenUtil {
      * @param user
      * @return token
      */
-    public static String sign(Object o) {
+    public static String sign(User user) {
         String token = null;
         try {
             Date expireAt = new Date(System.currentTimeMillis() + EXPIRE_TIME);
             token = JWT.create()
                     .withIssuer("auth0")
-                    .withClaim("object",o.toString())
+                    .withClaim("account",user.getAccount())
+                    .withClaim("password",user.getPassword())
+                    .withClaim("role",user.getRole())
                     .withExpiresAt(expireAt)
                     .sign(Algorithm.HMAC256(TOKEN_SECRET));
         } catch (IllegalArgumentException | JWTCreationException je) {
@@ -41,19 +43,23 @@ public class TokenUtil {
     }
 
 
-    public static Boolean verify(String token){
+    public static User verify(String token){
 
         try {
             JWTVerifier jwtVerifier=JWT.require(Algorithm.HMAC256(TOKEN_SECRET)).withIssuer("auth0").build();
             DecodedJWT decodedJwt =jwtVerifier.verify(token);
             System.out.println("认证通过：");
-            System.out.println("object: " + decodedJwt .getClaim("object").asString());
+            System.out.println("object: " + decodedJwt .getClaim("account").asString());
             System.out.println("过期时间：      " + decodedJwt .getExpiresAt());
+            return  new User(
+                    decodedJwt .getClaim("account").asString(),
+                    decodedJwt .getClaim("password").asString(),
+                    decodedJwt .getClaim("role").asString()
+            );
         } catch (IllegalArgumentException | JWTVerificationException e) {
             //抛出错误即为验证不通过
-            return false;
+            return null;
         }
-        return true;
     }
 
 }

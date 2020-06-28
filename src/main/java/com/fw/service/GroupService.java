@@ -3,6 +3,8 @@ package com.fw.service;
 import com.fw.domain.Group;
 import com.fw.domain.Result;
 
+import java.util.List;
+
 /**
  * @author yqf
  */
@@ -40,5 +42,12 @@ public interface GroupService {
      * @return result
      * */
     Result deleteById(Group group);
+
+    /**
+     * find group by name
+     * @param group
+     * @return result
+     * */
+    List<Group> findOneByName(Group group);
 
 }

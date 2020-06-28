@@ -1,9 +1,6 @@
 package com.fw.service;
 
-import com.fw.domain.Entry;
-import com.fw.domain.Group;
-import com.fw.domain.Judges;
-import com.fw.domain.Result;
+import com.fw.domain.*;
 
 /**
  * @author yqf
@@ -39,14 +36,71 @@ public interface EntryService {
 
     /**
      * find entry list
-     * @param  judges
+     * @param  entryJudges
      * @return result
      * */
-    Result findOneByJudgesId(Judges judges);
+    Result findAllByJudgesId(EntryJudges entryJudges);
 
     /***
      * find all
      * @return result
      * */
     Result findAll();
+
+    /**
+     * find one by id
+     * @param entry
+     * @return result
+     * */
+    Result findOneById(Entry entry);
+
+    /**
+     * add entry for judges
+     * @param entryJudges
+     * @return result
+     * */
+    Result addEntryJudges(EntryJudges entryJudges);
+
+    /**
+     * delete record by entry id
+     * @param entryJudges
+     * @return result
+     * */
+    Result deleteEntryJudges(EntryJudges entryJudges);
+
+    /**
+     * delete by entry id and judges id
+     * @param entryJudges entity
+     * @return return
+     * */
+    Result deleteByEntryIdAndJudges(EntryJudges entryJudges);
+
+    /**
+     * update remark
+     * @param entryJudges
+     * @return int
+     * */
+    Result updateRemarkAndScore(EntryJudges entryJudges);
+
+    /**
+     * find remark
+     * @param entryJudges
+     * @return rs
+     * */
+    Result findRemark(EntryJudges entryJudges);
+
+    /**
+     * find score
+     * @param entryScore
+     * @return rs;
+     * */
+    Result findAllByEntryJudgesId(EntryScore entryScore);
+
+    /**
+     * find all by entry id
+     * @param entry
+     * @return rs
+     * */
+    Result findAllByEntryId(Entry entry);
+
 }

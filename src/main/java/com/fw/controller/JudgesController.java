@@ -52,4 +52,12 @@ public class JudgesController {
 
         return new ResponseEntity<>(all,HttpStatus.OK);
     }
+
+    @GetMapping("{id}")
+    public ResponseEntity<Result> findOneById(@PathVariable Integer id){
+        Judges judges = new Judges();
+        judges.setId(id);
+        Result oneById = judgesService.findOneById(judges);
+        return new ResponseEntity<>(oneById,HttpStatus.OK);
+    }
 }

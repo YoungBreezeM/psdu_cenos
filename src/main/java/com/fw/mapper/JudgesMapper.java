@@ -35,7 +35,15 @@ public interface JudgesMapper {
      * @return list
      * */
     @Select("select * from judges where id =#{id}")
-    List<Judges> findOneById(Judges judges);
+    Judges findOneById(Judges judges);
+
+    /**
+     * find one by id
+     * @param id
+     * @return judges
+     * */
+    @Select("select * from judges where id =#{id}")
+    Judges findReOneById(@Param("id") Integer id);
 
     /**
      * find All judges
@@ -56,7 +64,7 @@ public interface JudgesMapper {
      * update judges info
      * @param judges entity
      * */
-    @Update("update judges set email = #{email},password = #{password} where id =#{id}")
+    @Update("update judges set email = #{email},judgesName = #{judgesName},password = #{password} where id =#{id}")
     void updateJudges(Judges judges);
 
     /**

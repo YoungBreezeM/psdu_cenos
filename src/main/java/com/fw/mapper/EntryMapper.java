@@ -1,6 +1,7 @@
 package com.fw.mapper;
 
 import com.fw.domain.Entry;
+import com.fw.domain.EntryJudges;
 import org.apache.ibatis.annotations.*;
 import org.apache.ibatis.type.JdbcType;
 import org.springframework.stereotype.Repository;
@@ -43,6 +44,7 @@ public interface EntryMapper {
      * @param entry
      * @return list
      * */
+    @ResultMap(value = "entryMap")
     @Select("select * from entry where entryName = #{entryName}")
     List<Entry> findAllByName(Entry entry);
 
@@ -51,9 +53,14 @@ public interface EntryMapper {
      * @param entry
      * @return
      * */
+    @ResultMap(value = "entryJudges")
     @Select("select * from entry where id =#{id}")
-
+    @Results({
+            @Result(column = "group_id",property = "group",one = @One(select = "com.fw.mapper.GroupMapper.findOneReById"))
+    })
     List<Entry> findAllById(Entry entry);
+
+
 
     /**
      * find one by id
@@ -61,17 +68,36 @@ public interface EntryMapper {
      * @return entry
      * */
     @Select("select * from entry where id =#{id}")
-    @Results({
+    @Results(id = "entryJudges",value = {
             @Result(id = true,column = "id",property = "id"),
+            @Result(column = "group_id",property = "groupId"),
+            @Result(column = "track_id",property = "trackId"),
+            @Result(column = "grouping_id",property = "groupingId"),
             @Result(column = "id",property = "files",many = @Many(select = "com.fw.mapper.FileMapper.findAllByEntryId")),
     })
     Entry findOneById(Entry entry);
+
+    /**
+     * find one by id
+     * @param  id
+     * @return entry
+     * */
+    @Select("select * from entry where id =#{id}")
+    @Results({
+            @Result(id = true,column = "id",property = "id"),
+            @Result(column = "group_id",property = "group",one = @One(select = "com.fw.mapper.GroupMapper.findOneReById")),
+            @Result(column = "track_id",property = "trackId"),
+            @Result(column = "grouping_id",property = "gradings",many = @Many(select = "com.fw.mapper.GradingGroupingMapper.findAllByGroupingId")),
+            @Result(column = "id",property = "files",many = @Many(select = "com.fw.mapper.FileMapper.findAllByEntryId")),
+    })
+    Entry findOneReById(@Param("id") Integer id);
 
     /**
      * find one by name
      * @param entry entity
      * @return entity
      * */
+    @ResultMap(value = "entryMap")
     @Select("select * from entry where entryName = #{entryName} ")
     Entry findOneByName(Entry entry);
 
@@ -80,6 +106,13 @@ public interface EntryMapper {
      * find
      * @return list
      * */
+    @Results({
+            @Result(id = true,column = "id",property = "id"),
+            @Result(column = "track_id",property = "track",one = @One(select = "com.fw.mapper.TrackMapper.findReOneById")),
+            @Result(column = "grouping_id",property = "grouping",one = @One(select = "com.fw.mapper.GroupingMapper.findOneById")),
+            @Result(column = "id",property = "entryJudges",many = @Many(select = "com.fw.mapper.EntryJudgesMapper.findAllByEntryId")),
+            @Result(column = "group_id",property = "group",one = @One(select = "com.fw.mapper.GroupMapper.findOneReById"))
+    })
     @Select("select * from entry")
     List<Entry> findAll();
 
@@ -88,14 +121,14 @@ public interface EntryMapper {
      * add new entry
      * @param entry entity
      * */
-    @Insert("insert into entry(entryName,entryExplanation,createdTime,remake,group_id,judges_id) values(#{entryName},#{entryExplanation},#{createdTime},#{remake},#{groupId},#{judgesId}) ")
+    @Insert("insert into entry(entryName,entryExplanation,createdTime,group_id,track_id,grouping_id,instructor) values(#{entryName},#{entryExplanation},#{createdTime},#{groupId},#{trackId},#{groupingId},#{instructor})")
     void addEntryMapper(Entry entry);
 
     /**
      * update entry info
      * @param entry entity
      * */
-    @Update("update entry set entryName=#{entryName},entryExplanation=#{entryExplanation},createdTime=#{createdTime},remake=#{remake},group_id=#{groupId},judges_id=#{judgesId} where id =#{id}")
+    @Update("update entry set entryName=#{entryName},entryExplanation=#{entryExplanation},createdTime=#{createdTime},group_id=#{groupId},track_id=#{trackId},grouping_id=#{groupingId} where id =#{id}")
     void updateEntry(Entry entry);
 
     /**

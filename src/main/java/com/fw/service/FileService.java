@@ -2,6 +2,7 @@ package com.fw.service;
 
 
 import com.fw.domain.Entry;
+import com.fw.domain.Result;
 import com.fw.domain.UploadFile;
 import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
@@ -31,7 +32,7 @@ public interface FileService {
      * @param file
      * @return file
      * */
-    UploadFile storeFile(MultipartFile file);
+    Result storeFile(MultipartFile file);
 
     /**
      * 文件下载

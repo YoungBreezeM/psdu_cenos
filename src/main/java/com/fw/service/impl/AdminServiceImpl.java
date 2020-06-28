@@ -41,14 +41,11 @@ public class AdminServiceImpl implements AdminService {
             Admin oneByNameAndPassword = adminMapper.findOneByNameAndPassword(admin);
 
             if(oneByNameAndPassword==null){
-                return new Result(ResultType.WrongPassWord,"密码错误",data);
+                return new Result(ResultType.WrongPassWord,data);
             }
-
-            data.put("token", TokenUtil.sign(oneByNameAndPassword));
 
             data.put("role", Role.Admin.getType());
 
-            data.put("info",oneByNameAndPassword);
 
         }else {
             return new Result(ResultType.Unregistered,"账号未注册",data);

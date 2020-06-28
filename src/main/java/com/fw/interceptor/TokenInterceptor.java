@@ -1,5 +1,6 @@
 package com.fw.interceptor;
 
+import com.fw.domain.User;
 import com.fw.utils.TokenUtil;
 import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.stereotype.Component;
@@ -27,8 +28,8 @@ public class TokenInterceptor implements HandlerInterceptor {
         response.setCharacterEncoding("utf-8");
         String token = request.getHeader("token");
         if (token!=null){
-            boolean result= TokenUtil.verify(token);
-            if (result){
+            User verify = TokenUtil.verify(token);
+            if (verify!=null){
                 System.out.println("通过拦截器");
                 return true;
             }

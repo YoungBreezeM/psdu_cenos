@@ -31,7 +31,7 @@ public class GroupServiceImpl implements GroupService {
 
 
         if(allByEmail.size()>0){
-            return new Result(ResultType.Has_Registered);
+            return new Result(ResultType.EmailHasRegistered);
         }
 
         groupMapper.addGroup(group);
@@ -55,11 +55,8 @@ public class GroupServiceImpl implements GroupService {
                 return new Result(ResultType.WrongPassWord,"密码错误",data);
             }
 
-            data.put("token", TokenUtil.sign(oneByEmailAndPassword));
-
             data.put("role", Role.Group.getType());
 
-            data.put("info",oneByEmailAndPassword);
         }else {
             return new Result(ResultType.Unregistered,"账号未注册",data);
         }
@@ -105,5 +102,15 @@ public class GroupServiceImpl implements GroupService {
             return new Result(ResultType.Success);
         }
         return new Result(ResultType.NotFind);
+    }
+
+    @Override
+    public List<Group> findOneByName(Group group) {
+        List<Group> allByName = groupMapper.findAllByName(group);
+
+        if(allByName.size()>0){
+            return allByName;
+        }
+        return null;
     }
 }

@@ -47,6 +47,22 @@ public interface GroupMapper {
     List<Group> findAllById(Group group);
 
     /**
+     * find one by id
+     * @param id
+     * @return list
+     * */
+    @Select("select * from join_group where id =#{id}")
+    Group findOneReById(@Param("id") Integer id);
+
+    /**
+     * find one by name
+     * @param group
+     * @return  list
+     * */
+    @Select("select * from join_group where groupName = #{groupName}")
+    List<Group> findAllByName(Group group);
+
+    /**
      * add group
      * @param group entity
      * */

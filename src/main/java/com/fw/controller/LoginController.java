@@ -35,7 +35,7 @@ public class LoginController {
     private JudgesService judgesService;
 
 
-    @GetMapping
+    @PostMapping
     public ResponseEntity<Result> loginCheck(@Validated @RequestBody User user){
 
         Result result = null;
@@ -74,9 +74,17 @@ public class LoginController {
         }
 
         if(result==null){
-            return new ResponseEntity<>(new Result(ResultType.UnRole,"角色错误"),HttpStatus.OK);
+            return new ResponseEntity<>(new Result(ResultType.UnRole),HttpStatus.OK);
         }
 
+        Object data = result.getData();
+
+        if(data!=null){
+            Map<String,Object> rs = new HashMap<>(10);
+            rs.put("token",TokenUtil.sign(user));
+            rs.put("user",data);
+            result.setData(rs);
+        }
 
         return new ResponseEntity<>(result,HttpStatus.OK);
     }

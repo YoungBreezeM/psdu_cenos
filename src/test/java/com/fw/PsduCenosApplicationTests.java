@@ -2,6 +2,8 @@ package com.fw;
 
 import com.fw.domain.*;
 import com.fw.mapper.*;
+import com.fw.service.EntryService;
+import com.fw.service.GradingService;
 import com.fw.service.impl.GroupServiceImpl;
 import com.fw.utils.TokenUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -19,147 +21,92 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @SpringBootTest
 class PsduCenosApplicationTests {
 
     @Autowired
-    private AdminMapper adminMapper;
+    private GradingService gradingService;
 
     @Autowired
-    private EntryMapper entryMapper;
+    private EntryService entryService;
+
+    @Autowired
+    private EntryJudgesMapper entryJudgesMapper;
 
     @Autowired
     private GroupMapper groupMapper;
 
     @Autowired
-    private JudgesMapper judgesMapper;
+    private EntryMapper entryMapper;
 
     @Autowired
-    private FileMapper fileMapper;
+    private TrackMapper trackMapper;
+
+    @Autowired
+    private TrackGroupingMapper trackGroupingMapper;
+
+    @Autowired
+    private GroupingMapper groupingMapper;
+
+    @Autowired
+    private GradingGroupingMapper gradingGroupingMapper;
+
+
 
 
     @Test
-    void contextLoads() {
-        Admin admin = new Admin();
+    void testGradingService(){
+        Grading grading = new Grading();
+        grading.setScoreName("长相");
+        grading.setValue(50);
+        grading.setId(14);
 
-        admin.setId(2);
-        admin.setAdminName("admin2");
-        admin.setPassword("123456");
+        Rule rule = new Rule();
+        rule.setRuleContent("五官端正(0)");
+        rule.setGradingId(grading.getId());
 
-        adminMapper.updateAdmin(admin);
+        List<Rule> rules = new ArrayList<>();
+        rules.add(rule);
 
-//        System.out.println(oneByNameAndPassword);
+        grading.setRules(rules);
+
+        gradingService.deleteGrading(grading);
     }
 
     @Test
-    void entryMapperTest() {
-       // List<Entry> entryListByGroupId = entryMapper.findEntryListByGroupId(3);
-        // System.out.println(entryListByGroupId);
-        //List<Entry> listByJudgesId = entryMapper.findEntryListByJudgesId(2);
+    void testEntryJudges(){
+        EntryJudges entryJudges = new EntryJudges();
+        entryJudges.setJudgesId(7);
+        entryJudges.setEntryId(14);
+        entryJudges.setRemark("ok");
 
-       // System.out.println(listByJudgesId);
-        Entry entry = new Entry();
-
-        entry.setEntryName("ok");
-        entry.setGroupId(3);
-        entry.setId(5);
-        System.out.println(entry);
-//        entryMapper.deleteEntryById(entry.getId());
-    }
-
-    @Test
-    void groupMapperTest(){
-
-//        Group group = new Group();
-//        group.setEmail("k");
-//        group.setPassword("kou");
-//        group.setId(4);
-//
-//        groupMapper.updateGroup(group);
-//        Group oneByEmailAndPassword = groupMapper.findOneByEmailAndPassword(group);
-//        System.out.println(oneByEmailAndPassword);
-
-
-//        List<Group> all = groupMapper.findAll();
-//        System.out.println(all);
-    }
-
-    @Test
-    public void judgesMapperTest(){
-        Judges judges = new Judges();
-
-        judges.setId(3);
-
-        judges.setEmail("skk");
-
-        judges.setPassword("s");
-
-//        Judges oneByEmailAndPassword = judgesMapper.findOneByEmailAndPassword(judges);
-//
-//        System.out.println(oneByEmailAndPassword);
-
-        judgesMapper.deleteJudges(judges.getId());
-
-
-    }
-    @Test
-    void jwtTest(){
-//        User user = new User();
-//        user.setUserName("yqf");
-//        user.setPassword("123");
-//        String sign = TokenUtil.sign(user);
-        System.out.println(TokenUtil.verify("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJOYW1lIjoieXFmIiwiZXhwIjoxNTg5Njg2MDUxfQ.CA4_33P9w7m1Q0nC85V0cNnxt2RL77yKP_VkznAUKyU"));
-    }
-
-    @Test
-    void testEnum(){
-        Group group = new Group();
-
-        GroupServiceImpl groupService = new GroupServiceImpl();
-
-        Result result = groupService.addGroup(group);
-
-        System.out.println(result);
-    }
-
-    @Test
-    void testFile() throws IOException {
-        String classPath = ResourceUtils.getURL("classpath:").getPath();
-
-        File filePath = new File(classPath);
-
-        Path uploadPath = Paths.get(
-                filePath.getAbsolutePath() + "/uploads"
-        );
-
-        Files.createDirectories(uploadPath);
-        System.out.println(uploadPath);
-    }
-
-    @Test
-    void testFileMapper(){
-        Entry entry = new Entry();
-
-        entry.setId(7);
-
-        UploadFile uploadFileById = fileMapper.findUploadFileById(6);
-
-        Entry oneById = entryMapper.findOneById(entry);
-
-        uploadFileById.setEntryId(entry.getId());
-
-        List<UploadFile> files = oneById.getFiles();
-
-        files.add(uploadFileById);
-
-        for (UploadFile file : files) {
-            fileMapper.updateEntryIdById(file);
+        List<EntryJudges> allByEntryId = entryJudgesMapper.findAllByEntryId(14);
+        if(allByEntryId.size()>0){
+            List<EntryScore> entryScores = new ArrayList<>();
+            for (EntryJudges judges : allByEntryId) {
+                List<EntryScore> entryScores1 = judges.getEntryScores();
+                if (entryScores1.size()>0){
+                    entryScores.addAll(entryScores1);
+                }
+            }
+            System.out.println(entryScores);
         }
 
+    }
 
-        System.out.println(files);
+    @Test
+    void spaceName(){
+       Integer a = 69+61+70;
+       int c =3;
+       Double b ;
+        DecimalFormat df = new DecimalFormat("0.00");//格式化小数
+        String num = df.format((double) a/(double) c);//返回的是String类型
+        System.out.println(num);
     }
 
 }

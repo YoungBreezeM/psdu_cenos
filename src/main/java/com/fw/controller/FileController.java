@@ -2,6 +2,7 @@ package com.fw.controller;
 
 
 import com.fw.domain.Result;
+import com.fw.domain.ResultType;
 import com.fw.domain.UploadFile;
 
 import com.fw.service.FileService;
@@ -10,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -36,9 +38,10 @@ public class FileController {
      * 单文件上传
      * */
     @PostMapping("/uploadFile")
-    public UploadFile uploadFile(@RequestParam("file") MultipartFile file){
+    public ResponseEntity<Result> uploadFile(@RequestParam("file") MultipartFile file){
 
-        return fileService.storeFile(file);
+        System.out.println(file);
+        return new ResponseEntity<>(fileService.storeFile(file), HttpStatus.OK);
 
     }
     /**
@@ -46,7 +49,7 @@ public class FileController {
      * 基于单文件上传,通过遍历上传
      * */
     @PostMapping("/uploadMultipleFiles")
-    public List<UploadFile> uploadMultipleFiles(@RequestParam("files") MultipartFile[] files) {
+    public List<ResponseEntity> uploadMultipleFiles(@RequestParam("files") MultipartFile[] files) {
         return Arrays.stream(files)
                 .map(this::uploadFile)
                 .collect(Collectors.toList());
@@ -83,12 +86,12 @@ public class FileController {
      * 文件删除
      * */
     @DeleteMapping("deleteFile/{id}")
-    public Result deleteFile(@PathVariable Integer id){
+    public ResponseEntity<Result> deleteFile(@PathVariable Integer id){
         try {
             fileService.deleteFile(id);
-            return new Result(0,"success",null);
+            return new ResponseEntity<>(new Result(ResultType.DeleteFileSuccess),HttpStatus.OK);
         }catch (Exception e){
-            return new Result(1,e.getMessage(),null);
+            return new ResponseEntity<>(new Result(1,e.getMessage(),null),HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

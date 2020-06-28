@@ -36,8 +36,6 @@ public class Entry implements Serializable {
 
     private Date createdTime ;
 
-    private String remake;
-
     @NotNull(groups = {
             Select.class,
             Insert.class,
@@ -45,10 +43,37 @@ public class Entry implements Serializable {
     },message = "团队id不为空")
     private Integer groupId;
 
+    @NotNull(groups ={
+            Insert.class,
+            Update.class
+    },message = "请选择赛道")
+    private Integer trackId;
+
     @NotNull(groups = {
-            Select.class
-    },message = "评审id不为空")
-    private Integer judgesId;
+            Update.class,
+            Insert.class
+    },message = "指导老师不能为空")
+    private String instructor;
+
+    @NotNull(groups = {
+            Insert.class,
+            Update.class
+    },message = "请选择分组")
+    private Integer groupingId;
+
+    private List<Grading> gradings;
+
+    private String aveScore;
+
+    private Boolean isScore;
+
+    private Group group;
+
+    private Track track;
+
+    private Grouping grouping;
 
     private List<UploadFile> files;
+
+    private List<EntryJudges> entryJudges;
 }

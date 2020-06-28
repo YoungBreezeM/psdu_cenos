@@ -39,11 +39,7 @@ public class JudgesServiceImpl implements JudgesService {
                 return new Result(ResultType.WrongPassWord,"密码错误",data);
             }
 
-            data.put("token", TokenUtil.sign(oneByEmailAndPassword));
-
             data.put("role", Role.Judges.getType());
-
-            data.put("info",oneByEmailAndPassword);
 
         }else {
             return new Result(ResultType.Unregistered,"账号未注册",data);
@@ -52,6 +48,7 @@ public class JudgesServiceImpl implements JudgesService {
 
         return new Result(ResultType.Success,"登陆成功",data);
     }
+
 
     @Override
     public Result findAll() {
@@ -65,9 +62,19 @@ public class JudgesServiceImpl implements JudgesService {
     }
 
     @Override
+    public Result findOneById(Judges judges) {
+
+        Judges oneById = judgesMapper.findOneById(judges);
+        if(oneById!=null){
+            return new Result(ResultType.Success,oneById);
+        }
+        return new Result(ResultType.NotFind);
+    }
+
+    @Override
     public Result deleteById(Judges judges) {
-        List<Judges> oneById = judgesMapper.findOneById(judges);
-        if(oneById.size()>0){
+        Judges oneById = judgesMapper.findOneById(judges);
+        if(oneById!=null){
             judgesMapper.deleteJudges(judges.getId());
             return new Result(ResultType.Success);
         }
@@ -76,9 +83,9 @@ public class JudgesServiceImpl implements JudgesService {
 
     @Override
     public Result updateRecord(Judges judges) {
-        List<Judges> oneById = judgesMapper.findOneById(judges);
+        Judges oneById = judgesMapper.findOneById(judges);
 
-        if(oneById.size()>0){
+        if(oneById!=null){
             judgesMapper.updateJudges(judges);
             return new Result(ResultType.Success);
         }

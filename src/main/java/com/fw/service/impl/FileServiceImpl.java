@@ -1,9 +1,7 @@
 package com.fw.service.impl;
 
 
-import com.fw.domain.Entry;
-import com.fw.domain.FileProperties;
-import com.fw.domain.UploadFile;
+import com.fw.domain.*;
 
 import com.fw.exception.FileException;
 import com.fw.mapper.FileMapper;
@@ -15,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ResourceUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -79,9 +78,11 @@ public class FileServiceImpl implements FileService {
      * @return 文件名
      */
     @Override
-    public UploadFile storeFile(MultipartFile file) {
-
-        String fileName =new DateUtil().createTime("yyyy-MM-dd_HH:mm:ss") +"_"+ StringUtils.cleanPath(file.getOriginalFilename());
+    @Transactional(rollbackFor = RuntimeException.class)
+    public Result storeFile(MultipartFile file) {
+        String originalFileName = StringUtils.cleanPath(file.getOriginalFilename());
+        String[] split = originalFileName.split("\\.");
+        String fileName =split[0]+"_"+new DateUtil().createTime("yyyy-MM-dd_HH:mm:ss")+"."+split[1];
         String fileDownloadUrl = "/downloadFile/"+fileName;
         String fileAccessUrl = "/uploads/"+fileName;
         UploadFile uploadFile = new UploadFile(
@@ -105,7 +106,7 @@ public class FileServiceImpl implements FileService {
             //记录文件信息
             fileMapper.addFile(uploadFile);
 
-            return fileMapper.findUploadFileByFileName(uploadFile);
+            return new Result(ResultType.UploadFileSuccess,fileMapper.findUploadFileByFileName(uploadFile));
         } catch (IOException ex) {
 
             throw new FileException("Could not store file " + fileName + ". Please try again!", ex);

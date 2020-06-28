@@ -1,5 +1,6 @@
 package com.fw.service;
 
+import com.fw.domain.Admin;
 import com.fw.domain.Judges;
 import com.fw.domain.Result;
 
@@ -14,11 +15,19 @@ public interface JudgesService {
      * */
     Result findOneByEmailAndPassword(Judges judges);
 
+
     /**
      * find All
      * @return result
      * */
     Result findAll();
+
+    /**
+     * findOne by id
+     * @param judges
+     * @return result
+     * */
+    Result findOneById(Judges judges);
 
     /**
      * delete record
