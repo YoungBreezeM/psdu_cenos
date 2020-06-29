@@ -72,6 +72,7 @@ class PsduCenosApplicationTests {
 
         List<Rule> rules = new ArrayList<>();
         rules.add(rule);
+        System.out.println("hahahahahah");
 
         grading.setRules(rules);
 
