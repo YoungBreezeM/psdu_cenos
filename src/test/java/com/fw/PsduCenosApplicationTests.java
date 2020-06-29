@@ -67,7 +67,7 @@ class PsduCenosApplicationTests {
         grading.setId(14);
 
         Rule rule = new Rule();
-        rule.setRuleContent("hello ");
+        rule.setRuleContent("helldfdsfo ");
         rule.setGradingId(grading.getId());
 
         List<Rule> rules = new ArrayList<>();
