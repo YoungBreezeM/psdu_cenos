@@ -127,7 +127,7 @@ class PsduCenosApplicationTests {
     void redisTestSet(){
         ValueOperations<String, String> valueOperations = redisTemplate.opsForValue();
 
-        valueOperations.set("name","yqf");
+        valueOperations.set("name","yqff");
 
         redisTemplate.expire("name",60, TimeUnit.SECONDS);
 
