@@ -30,7 +30,11 @@ public enum ResultType {
     ResolveSuccess(0,"解析成功"),
     /**file */
     UploadFileSuccess(0,"文件上传成功"),
-    DeleteFileSuccess(0,"文件删除成功");
+    DeleteFileSuccess(0,"文件删除成功"),
+    /**mail*/
+    CheckSuccess(0,"校验成功"),
+    CheckFail(301,"验证码无效"),
+    CheckCaptchaPassTime(302,"验证码过期了");
 
     private Integer code;
 

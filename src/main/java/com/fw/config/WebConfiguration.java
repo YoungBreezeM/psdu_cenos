@@ -54,8 +54,16 @@ public class WebConfiguration extends WebMvcConfigurationSupport {
         registry.addInterceptor(tokenInterceptor)
                 .addPathPatterns("/**")
                 .excludePathPatterns("/login/**")
-                .excludePathPatterns("/register/**");
+                .excludePathPatterns("/register/**")
+                .excludePathPatterns("/static/**");
 
+    }
+
+    @Override
+    protected void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry
+                .addResourceHandler("/static/**")
+                .addResourceLocations("classpath:/static/");
     }
 }
 

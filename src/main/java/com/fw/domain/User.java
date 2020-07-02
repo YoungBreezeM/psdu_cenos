@@ -27,4 +27,7 @@ public class User implements Serializable {
 
     @NotBlank(message = "身份不能为空")
     private String role;
+
+
+
 }

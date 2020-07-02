@@ -113,4 +113,9 @@ public class GroupServiceImpl implements GroupService {
         }
         return null;
     }
+
+    @Override
+    public List<Group> findAllByEmail(Group group) {
+        return groupMapper.findAllByEmail(group);
+    }
 }

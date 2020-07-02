@@ -50,4 +50,11 @@ public interface GroupService {
      * */
     List<Group> findOneByName(Group group);
 
+    /**
+     * find all by Email
+     * @param group
+     * @return List
+     * */
+    List<Group> findAllByEmail(Group group);
+
 }

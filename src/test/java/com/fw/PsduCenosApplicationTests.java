@@ -4,30 +4,26 @@ import com.fw.domain.*;
 import com.fw.mapper.*;
 import com.fw.service.EntryService;
 import com.fw.service.GradingService;
-import com.fw.service.impl.GroupServiceImpl;
-import com.fw.utils.TokenUtil;
-import lombok.extern.slf4j.Slf4j;
+
+import com.fw.utils.MailUtil;
+import com.fw.utils.TemplatesUtils;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.shadow.com.univocity.parsers.annotations.Validate;
+;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.util.ClassUtils;
-import org.springframework.util.ResourceUtils;
-import org.springframework.validation.annotation.Validated;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
+
+import javax.mail.MessagingException;
+
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 @SpringBootTest
 class PsduCenosApplicationTests {
+
 
     @Autowired
     private GradingService gradingService;
@@ -56,6 +52,17 @@ class PsduCenosApplicationTests {
     @Autowired
     private GradingGroupingMapper gradingGroupingMapper;
 
+    @Autowired
+    private SysMailMapper sysMailMapper;
+
+    @Autowired
+    private TemplatesUtils templatesUtils;
+
+    @Autowired
+    private MailUtil mailUtil;
+
+    @Autowired
+    private RedisTemplate<String, String> redisTemplate;
 
 
 
@@ -109,4 +116,29 @@ class PsduCenosApplicationTests {
         System.out.println(num);
     }
 
+    @Test
+    void emailTest() throws  MessagingException {
+        String html = templatesUtils.renderCaptcha((int) ((Math.random()*9+1)*100000));
+        mailUtil.send("940695836@qq.com","940695836@qq.com","注册验证",html);
+
+    }
+
+    @Test
+    void redisTestSet(){
+        ValueOperations<String, String> valueOperations = redisTemplate.opsForValue();
+
+        valueOperations.set("name","yqf");
+
+        redisTemplate.expire("name",60, TimeUnit.SECONDS);
+
+    }
+
+    @Test
+    void redisGet(){
+        ValueOperations valueOperations = redisTemplate.opsForValue();
+        /*从redis中获取验证码*/
+        String verificationCode = (String) valueOperations.get("name");
+        System.out.println(verificationCode);
+
+    }
 }
