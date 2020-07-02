@@ -116,12 +116,12 @@ class PsduCenosApplicationTests {
         System.out.println(num);
     }
 
-    @Test
-    void emailTest() throws  MessagingException {
-        String html = templatesUtils.renderCaptcha((int) ((Math.random()*9+1)*100000));
-        mailUtil.send("940695836@qq.com","940695836@qq.com","注册验证",html);
-
-    }
+//    @Test
+//    void emailTest() throws  MessagingException {
+//        String html = templatesUtils.renderCaptcha((int) ((Math.random()*9+1)*100000));
+//        mailUtil.send("940695836@qq.com","940695836@qq.com","注册验证",html);
+//
+//    }
 
     @Test
     void redisTestSet(){
