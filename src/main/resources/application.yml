@@ -38,7 +38,7 @@ spring:
     properties.mail.smtp.starttls.enable: true
     properties.mail.smtp.starttls.required: true
     properties.mail.smtp.ssl.enable: true
-    port: 465
+
 
   mvc:
    static-path-pattern: /**
